@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KP-75 Player Randomizer</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
@@ -33,6 +36,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin: 5px;
     }
     ul {
       list-style-type: none;
@@ -55,6 +59,8 @@
   <input type="number" id="numPlayers" min="1" />
   <br />
   <button onclick="randomizePlayers()">Select Players</button>
+  <button onclick="clearResults()">Clear Results</button>
+  <button onclick="copyToClipboard()">Copy Results</button>
 
   <h2>Selected Players:</h2>
   <ul id="result"></ul>
@@ -73,23 +79,35 @@
         return;
       }
 
-      // Shuffle and select players
       const shuffled = names.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, num);
 
-      // Clear results
       const resultList = document.getElementById("result");
       resultList.innerHTML = "";
 
-      // Display numbered list
       selected.forEach((name, index) => {
         const li = document.createElement("li");
         li.textContent = `${index + 1}. ${name}`;
         resultList.appendChild(li);
       });
 
-      // Clear textarea for privacy
       nameField.value = "";
+    }
+
+    function clearResults() {
+      document.getElementById("result").innerHTML = "";
+    }
+
+    function copyToClipboard() {
+      const items = document.querySelectorAll("#result li");
+      const names = Array.from(items).map(item => item.textContent).join("\n");
+      if (names) {
+        navigator.clipboard.writeText(names)
+          .then(() => alert("Results copied to clipboard."))
+          .catch(err => alert("Failed to copy."));
+      } else {
+        alert("No results to copy.");
+      }
     }
   </script>
 </body>
