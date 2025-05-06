@@ -17,8 +17,10 @@
     }
     textarea {
       width: 100%;
-      max-width: 400px;
-      height: 150px;
+      max-width: 600px;
+      height: 250px;
+      font-family: monospace;
+      line-height: 1.5;
     }
     input[type="number"] {
       width: 80px;
@@ -47,7 +49,7 @@
   <h1>KP-75 Player Randomizer</h1>
 
   <p>Enter a list of player names (one per line):</p>
-  <textarea id="nameList"></textarea>
+  <textarea id="nameList" placeholder="Name 1\nName 2\nName 3..."></textarea>
   <br />
   <label for="numPlayers">Number of players to select:</label>
   <input type="number" id="numPlayers" min="1" />
@@ -59,7 +61,8 @@
 
   <script>
     function randomizePlayers() {
-      const names = document.getElementById("nameList").value
+      const nameField = document.getElementById("nameList");
+      const names = nameField.value
         .split("\n")
         .map(name => name.trim())
         .filter(name => name.length > 0);
@@ -70,16 +73,23 @@
         return;
       }
 
+      // Shuffle and select players
       const shuffled = names.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, num);
 
+      // Clear results
       const resultList = document.getElementById("result");
       resultList.innerHTML = "";
-      selected.forEach(name => {
+
+      // Display numbered list
+      selected.forEach((name, index) => {
         const li = document.createElement("li");
-        li.textContent = name;
+        li.textContent = `${index + 1}. ${name}`;
         resultList.appendChild(li);
       });
+
+      // Clear textarea for privacy
+      nameField.value = "";
     }
   </script>
 </body>
