@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KP-75 Player Randomizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    #logo {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 400px;
+      height: 150px;
+    }
+    input[type="number"] {
+      width: 80px;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #228B22;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <img id="logo" src="default_article-1024x536.png" alt="KP-75 Logo" />
+  <h1>KP-75 Player Randomizer</h1>
+
+  <p>Enter a list of player names (one per line):</p>
+  <textarea id="nameList"></textarea>
+  <br />
+  <label for="numPlayers">Number of players to select:</label>
+  <input type="number" id="numPlayers" min="1" />
+  <br />
+  <button onclick="randomizePlayers()">Select Players</button>
+
+  <h2>Selected Players:</h2>
+  <ul id="result"></ul>
+
+  <script>
+    function randomizePlayers() {
+      const names = document.getElementById("nameList").value
+        .split("\n")
+        .map(name => name.trim())
+        .filter(name => name.length > 0);
+      const num = parseInt(document.getElementById("numPlayers").value);
+
+      if (isNaN(num) || num < 1 || num > names.length) {
+        alert("Please enter a valid number of players to select.");
+        return;
+      }
+
+      const shuffled = names.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, num);
+
+      const resultList = document.getElementById("result");
+      resultList.innerHTML = "";
+      selected.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        resultList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
